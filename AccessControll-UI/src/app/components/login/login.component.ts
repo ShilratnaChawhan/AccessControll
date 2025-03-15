@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit{
       this.authService.login(credentials).subscribe(
         response => {
           console.log('Login successful');
-          this.authService.showAlertWithDelay('success', 'Login successful!','/dashboard');
+          this.authService.showAlertWithDelay('success', 'Login successful!','/Dashboard');
           this.authService.saveToken(response);
           this.decriptToken();
         },

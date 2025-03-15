@@ -155,5 +155,25 @@ namespace AccessControll_API.Controllers
             var createdMenu = await _authenticationService.CreateMenuAsync(menu);
             return CreatedAtAction(nameof(GetMenus), new { id = createdMenu.Menu_Id }, createdMenu);
         }
+
+        [HttpGet("get-menu-by-role/{roleId}")]
+        public async Task<ActionResult<Entity_Menu>> GetMenuByRole(long roleId)
+        {
+            return Ok(await _authenticationService.GetMenuByRole(roleId));
+        }
+
+        [HttpPost("update-user-role")]
+        public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRole updateUserRole)
+        {
+            return Ok(await _authenticationService.UpdateUserRole(updateUserRole));
+        }
+
+        [HttpDelete("delete-user/{userId}")]
+        public async Task<ActionResult> DeleteUser(long userId)
+        {
+            var success = await _authenticationService.DeleteUserAsync(userId);
+            return success ? Ok(new { message = "User deleted successfully" }) :
+                             NotFound(new { message = "User not found" });
+        }
     }
 }

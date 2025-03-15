@@ -94,7 +94,7 @@ export class RoleManagementComponent {
 
 
 
-   menus: any[] = [];
+    menus: any[] = [];
     newMenu: any = { menu_Code: '', is_Active: true  };
     menuLoading: boolean = false;
     menuSuccess: boolean = false;

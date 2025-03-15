@@ -1,4 +1,5 @@
-﻿using AccessControll_API.Domain;
+﻿using System;
+using AccessControll_API.Domain;
 using AccessControll_API.ModelAndContext;
 using Azure.Core;
 using Microsoft.EntityFrameworkCore;
@@ -318,12 +319,12 @@ namespace AccessControll_API.Service
 
             var permissions = await (from permission in context.Entity_Role_Menu_Permission
                                      join menu in context.Entity_Menu on permission.Menu_Id equals menu.Menu_Id into menuGroup
-                                     from menu in menuGroup.DefaultIfEmpty() 
+                                     from menu in menuGroup.DefaultIfEmpty()
                                      where permission.Role_Id == roleId
                                      select new MenuPermissionItem
                                      {
                                          MenuId = permission.Menu_Id ?? 0,
-                                         MenuCode = menu != null ? menu.Menu_Code : string.Empty, 
+                                         MenuCode = menu != null ? menu.Menu_Code : string.Empty,
                                          CanAdd = permission.Can_Create ?? false,
                                          CanEdit = permission.Can_Edit ?? false,
                                          CanView = permission.Can_View ?? false,
@@ -465,6 +466,55 @@ namespace AccessControll_API.Service
             context.Entity_Menu.Add(menu);
             await context.SaveChangesAsync();
             return menu;
+        }
+
+        public async Task<List<Entity_Menu>> GetMenuByRole(long roleId)
+        {
+            return await this.context.Entity_Role_Menu_Permission
+                .Where(o => o.Role_Id == roleId && o.Is_Active == true && o.Can_View == true)
+                .Join(this.context.Entity_Menu,
+                      menu => menu.Menu_Id,
+                      m => m.Menu_Id,
+                      (menu, m) => new Entity_Menu
+                      {
+                          Menu_Id = m.Menu_Id,
+                          Menu_Code = m.Menu_Code,
+                          Is_Active = m.Is_Active
+                      }).ToListAsync();
+        }
+
+        public async Task<Entity_User> UpdateUserRole(UpdateUserRole updateUserRole)
+        {
+            if (updateUserRole == null)
+                throw new ArgumentNullException(nameof(updateUserRole));
+
+            var user = await context.Entity_User.FindAsync(updateUserRole.UserId);
+
+            if (user == null)
+                throw new KeyNotFoundException($"User with ID {updateUserRole.UserId} not found.");
+
+            var role = await context.Entity_Role.FindAsync(updateUserRole.RoleId);
+            if (role == null)
+                throw new KeyNotFoundException($"Role with ID {updateUserRole.RoleId} not found.");
+            else
+            {
+                user.Role_Id = updateUserRole.RoleId;
+                context.Entity_User.Update(user);
+            }
+
+            await context.SaveChangesAsync();
+
+            return user;
+        }
+
+        public async Task<bool> DeleteUserAsync(long userId)
+        {
+            var user = await context.Entity_User.FindAsync(userId);
+            if (user == null) return false;
+
+            context.Entity_User.Remove(user);
+            await context.SaveChangesAsync();
+            return true;
         }
     }
 }

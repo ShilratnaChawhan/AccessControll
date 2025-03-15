@@ -7,11 +7,11 @@ import { SettingComponent } from '../../components/setting/setting.component';
 import { UsersComponent } from '../../components/users/users.component';
 
 const routes: Routes = [
-  {path:'dashboard',component: HomeComponent},
-  {path:'user',component: UsersComponent},
-  {path:'setting',component: SettingComponent},
-  {path:'role-permissions', component: RoleManagementComponent },
-  {path:'role-permissions/:roleId', component: RolePermissionComponent },
+  {path:'Dashboard',component: HomeComponent},
+  {path:'Users',component: UsersComponent},
+  {path:'Setting',component: SettingComponent},
+  {path:'Role', component: RoleManagementComponent },
+  {path:'Role/:roleId', component: RolePermissionComponent },
 
 ];
 

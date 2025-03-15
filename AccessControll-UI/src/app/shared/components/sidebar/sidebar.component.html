@@ -1,9 +1,12 @@
 <nav #sidebar id="sidebar" class="active">
+    <div *ngIf="menuError" class="alert alert-danger">
+        {{ menuError }}
+      </div>
     <ul class="list-unstyled components text-secondary">
-        <li>
-            <a routerLink="/dashboard"><i class="fas fa-home"></i> Dashboard</a>
+        <li *ngFor="let menu of menus">
+            <a [routerLink]="['/' + menu.menu_Code]"><i class="fas fa-home"></i>{{menu.menu_Code}}</a>
         </li>
-        <li>
+        <!-- <li>
             <a routerLink="/user"><i class="fas fa-user-friends"></i>Users</a>
         </li>
         <li>
@@ -11,6 +14,6 @@
         </li>
         <li>
             <a routerLink="/setting"><i class="fas fa-cog"></i>Settings</a>
-        </li>
+        </li> -->
     </ul>
 </nav>

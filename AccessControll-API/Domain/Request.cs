@@ -71,4 +71,10 @@
         public bool? IsActive { get; set; }
         public long RolePermissionId { get; set; }
     }
+
+    public class UpdateUserRole
+    {
+        public long UserId { get; set; }
+        public long RoleId { get; set; }
+    }
 }

@@ -24,5 +24,8 @@ namespace AccessControll_API.Service
         Task<bool> DeleteRoleAsync(long roleId);
         Task<Entity_Role> CreateRoleAsync(Entity_Role role);
         Task<Entity_Menu> CreateMenuAsync(Entity_Menu menu);
+        Task<List<Entity_Menu>> GetMenuByRole(long roleId);
+        Task<Entity_User> UpdateUserRole(UpdateUserRole updateUserRole);
+        Task<bool> DeleteUserAsync(long userId);
     }
 }

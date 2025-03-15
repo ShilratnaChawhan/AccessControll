@@ -76,7 +76,7 @@
                     <button class="btn btn-sm btn-danger me-2" (click)="deleteRole(role, i)" [disabled]="roleLoading">
                       <i class="bi bi-trash"></i> Delete
                     </button>
-                    <a [routerLink]="['/role-permissions', role.role_Id]" class="btn btn-sm btn-primary">
+                    <a [routerLink]="['/Role', role.role_Id]" class="btn btn-sm btn-primary">
                       <i class="bi bi-shield-lock"></i> Manage Permissions
                     </a>
                   </td>

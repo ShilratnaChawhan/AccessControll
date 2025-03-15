@@ -154,4 +154,18 @@ export class ApiService {
   deleteRolePermission(rolePermissionId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/permissions/${rolePermissionId}`);
   }
+
+  //get menu bu role
+  getMenuByRole(role: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/get-menu-by-role/${role}`);
+  }
+
+  //user
+  updateUserRole(userId: number, roleId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/update-user-role`, { userId, roleId });
+  }
+
+  deleteUser(userId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete-user/${userId}`);
+  }
 }
