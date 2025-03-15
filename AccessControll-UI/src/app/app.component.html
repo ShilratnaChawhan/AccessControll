@@ -1,0 +1,11 @@
+<!-- Global Alert Box -->
+<div *ngIf="alertMessage" class="global-alert alert" [ngClass]="'alert-' + alertMessage.type">
+  <h5 class="alert-title">
+    <i [ngClass]="alertMessage.type === 'success' ? 'fas fa-check' : 'fas fa-exclamation-triangle'"></i>
+    {{ alertMessage.type | titlecase }}
+  </h5>
+  {{ alertMessage.text }}
+</div>
+
+<!-- Main content (router outlet) -->
+<router-outlet></router-outlet>

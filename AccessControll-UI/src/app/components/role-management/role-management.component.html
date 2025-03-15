@@ -1,0 +1,179 @@
+<div class="container mt-4">
+  <div class="row">
+    <!-- Role Management Section -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4>Role Management</h4>
+        </div>
+        <div class="card-body">
+          <div *ngIf="roleLoading" class="text-center my-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <div *ngIf="roleSuccess" class="alert alert-success">
+            Operation completed successfully!
+          </div>
+
+          <div *ngIf="roleError" class="alert alert-danger">
+            {{ roleError }}
+          </div>
+
+          <!-- Create new role -->
+          <div class="card mb-4">
+            <div class="card-header bg-light">
+              <h5>Create New Role</h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Role Name</label>
+                  <input type="text" class="form-control" [(ngModel)]="newRole.role_Name" placeholder="Enter role name">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Description</label>
+                  <input type="text" class="form-control" [(ngModel)]="newRole.description" placeholder="Enter role description">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Active</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="newRole.is_Active">
+                    <label class="form-check-label">Is Active</label>
+                  </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                  <button class="btn btn-success" (click)="createRole()" [disabled]="roleLoading">
+                    <i class="bi bi-plus-circle"></i> Create Role
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- List of roles -->
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Role ID</th>
+                  <th>Role Name</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let role of roles; let i = index">
+                  <td>{{ role.role_Id }}</td>
+                  <td>{{ role.role_Name }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="role.is_Active ? 'bg-success' : 'bg-danger'">
+                      {{ role.is_Active ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-danger me-2" (click)="deleteRole(role, i)" [disabled]="roleLoading">
+                      <i class="bi bi-trash"></i> Delete
+                    </button>
+                    <a [routerLink]="['/role-permissions', role.role_Id]" class="btn btn-sm btn-primary">
+                      <i class="bi bi-shield-lock"></i> Manage Permissions
+                    </a>
+                  </td>
+                </tr>
+                <tr *ngIf="roles.length === 0">
+                  <td colspan="4" class="text-center">No roles found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu Management Section -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4>Menu Management</h4>
+        </div>
+        <div class="card-body">
+          <div *ngIf="menuLoading" class="text-center my-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <div *ngIf="menuSuccess" class="alert alert-success">
+            Operation completed successfully!
+          </div>
+
+          <div *ngIf="menuError" class="alert alert-danger">
+            {{ menuError }}
+          </div>
+
+          <!-- Create new menu -->
+          <div class="card mb-4">
+            <div class="card-header bg-light">
+              <h5>Create New Menu</h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Menu Code</label>
+                  <input type="text" class="form-control" [(ngModel)]="newMenu.menu_Code" placeholder="Enter menu code">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Active</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="newMenu.is_Active">
+                    <label class="form-check-label">Is Active</label>
+                  </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                  <button class="btn btn-success" (click)="createMenu()" [disabled]="menuLoading">
+                    <i class="bi bi-plus-circle"></i> Create Menu
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- List of menus -->
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Menu ID</th>
+                  <th>Menu Code</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let menu of menus; let i = index">
+                  <td>{{ menu.menu_Id }}</td>
+                  <td>{{ menu.menu_Code }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="menu.is_Active ? 'bg-success' : 'bg-danger'">
+                      {{ menu.is_Active ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-danger" (click)="deleteMenu(menu, i)" [disabled]="menuLoading">
+                      <i class="bi bi-trash"></i> Delete
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="menus.length === 0">
+                  <td colspan="4" class="text-center">No menus found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

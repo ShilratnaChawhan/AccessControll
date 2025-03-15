@@ -1,0 +1,58 @@
+<div class="container mt-4">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h4>Role Menu Permissions</h4>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="roleSelect" class="form-label">Select Role:</label>
+            <select id="roleSelect" class="form-select" [(ngModel)]="selectedRoleId" (change)="onRoleChange()" [disabled]="loading">
+              <option *ngFor="let role of roles" [value]="role.role_Id">{{ role.role_Name }}</option>
+            </select>
+          </div>
+        </div>
+  
+        <div *ngIf="loading" class="text-center my-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+  
+        <div *ngIf="saveSuccess" class="alert alert-success">Permissions saved successfully!</div>
+        <div *ngIf="saveError" class="alert alert-danger">{{ saveError }}</div>
+        <div *ngIf="deleteSuccess" class="alert alert-success">Permission deleted successfully!</div>
+        <div *ngIf="deleteError" class="alert alert-danger">{{ deleteError }}</div>
+  
+        <div *ngIf="permissionModel && !loading">
+          <table class="table table-bordered table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Menu</th>
+                <th class="text-center">Can View</th>
+                <th class="text-center">Can Add</th>
+                <th class="text-center">Can Edit</th>
+                <th class="text-center">Can Delete</th>
+                <th class="text-center">Active</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let perm of permissionModel.permissions; let i = index">
+                <td>{{ perm.menuCode }}</td>
+                <td class="text-center"><input type="checkbox" [(ngModel)]="perm.canView"></td>
+                <td class="text-center"><input type="checkbox" [(ngModel)]="perm.canAdd"></td>
+                <td class="text-center"><input type="checkbox" [(ngModel)]="perm.canEdit"></td>
+                <td class="text-center"><input type="checkbox" [(ngModel)]="perm.canDelete"></td>
+                <td class="text-center"><input type="checkbox" [(ngModel)]="perm.isActive"></td>
+                <td class="text-center"><button class="btn btn-sm btn-danger" (click)="deletePermission(perm, i)">Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+  
+          <button class="btn btn-primary" (click)="savePermissions()">Save Permissions</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
