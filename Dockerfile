@@ -1,10 +1,10 @@
-# Pull official base image
+# Pull official Node.js base image
 FROM node:20 AS build
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package files separately to improve caching
+# Copy package files first to leverage Docker caching
 COPY package*.json ./
 
 # Install dependencies
@@ -13,23 +13,23 @@ RUN npm install
 # Copy the entire application source code
 COPY . .
 
-# Build the application
-RUN npm run build
+# Build the Angular application
+RUN npm run build --prod
 
-# Use a lightweight Nginx image to serve the built application
-FROM nginx:1.16.0-alpine
+# Create a lightweight runtime environment using Node.js
+FROM node:20-alpine
 
-# Remove the default Nginx configuration
-RUN rm /etc/nginx/conf.d/default.conf
+# Set the working directory
+WORKDIR /app
 
-# Copy the built application from the previous stage
-COPY --from=build /app/dist/access-controll-ui /usr/share/nginx/html
+# Install a minimal HTTP server (Express)
+RUN npm install -g serve
 
-# Copy custom Nginx configuration file
-COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy the built Angular app from the previous stage
+COPY --from=build /app/dist/access-controll-ui /app
 
-# Expose port 80 to allow external access
-EXPOSE 80
+# Expose port 4000
+EXPOSE 4000
 
-# Start Nginx in the foreground
-CMD ["nginx", "-g", "daemon off;"]
+# Start the Angular app with a Node.js server
+CMD ["serve", "-s", "/app", "-l", "4000"]
