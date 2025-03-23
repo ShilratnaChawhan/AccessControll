@@ -36,9 +36,5 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Expose Ports (Optional for local testing)
-EXPOSE 80  # Nginx
-EXPOSE 5000  # .NET API
-
 # Start both .NET API and Nginx
 CMD ["/bin/sh", "/entrypoint.sh"]
