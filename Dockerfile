@@ -1,5 +1,5 @@
 # Pull official base image
-FROM node:16 AS build
+FROM node:20 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
