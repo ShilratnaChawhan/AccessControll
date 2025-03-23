@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Build the Angular application
-RUN npm run build --prod
+RUN npm run build 
 
 # Create a lightweight runtime environment using Node.js
 FROM node:20-alpine
@@ -22,14 +22,17 @@ FROM node:20-alpine
 # Set the working directory
 WORKDIR /app
 
-# Install a minimal HTTP server (Express)
-RUN npm install -g serve
+# Install Express.js
+RUN npm install express
 
 # Copy the built Angular app from the previous stage
 COPY --from=build /app/dist/access-controll-ui /app
 
-# Expose port 4000
-EXPOSE 4000
+# Copy the custom Express server script
+COPY server.js .
 
-# Start the Angular app with a Node.js server
-CMD ["serve", "-s", "/app", "-l", "4000"]
+# Expose port 3000
+EXPOSE 3000
+
+# Start the Angular app with Express.js
+CMD ["node", "server.js"]
