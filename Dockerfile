@@ -1,28 +1,35 @@
-# pull official base image
-FROM node:18 as build
+# Pull official base image
+FROM node:18 AS build
 
-#working directory of containerized app
+# Set the working directory inside the container
 WORKDIR /app
 
-#copy 
-COPY . /app/
+# Copy package files separately to improve caching
+COPY package*.json ./
 
-#prepare the container for building 
+# Install dependencies
 RUN npm install
 
-# RUN npm install 
+# Copy the entire application source code
+COPY . .
+
+# Build the application
 RUN npm run build
 
-#prepare nginx
+# Use a lightweight Nginx image to serve the built application
 FROM nginx:1.16.0-alpine
-COPY --from=build /app/dist/access-controll-ui /usr/share/nginx/html 
 
+# Remove the default Nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
 
-COPY nginx/nginx.conf /etc/nginx/conf.d
+# Copy the built application from the previous stage
+COPY --from=build /app/dist /usr/share/nginx/html
 
-#fire for nginx
+# Copy custom Nginx configuration file
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80 to allow external access
 EXPOSE 80
 
-CMD [ "nginx","-g","daemon off;" ]
-
+# Start Nginx in the foreground
+CMD ["nginx", "-g", "daemon off;"]
