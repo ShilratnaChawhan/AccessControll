@@ -1,5 +1,5 @@
 # Step 1: Build Angular Frontend
-FROM node:14 AS frontend-build
+FROM node:18 AS frontend-build
 WORKDIR /app
 COPY AccessControll-UI/ ./AccessControll-UI/
 WORKDIR /app/AccessControll-UI
