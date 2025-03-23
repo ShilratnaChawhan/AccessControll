@@ -14,8 +14,11 @@ WORKDIR /app/AccessControll-API
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
-# Step 3: Create Final Image with Nginx and .NET Runtime
-FROM nginx:1.24-alpine AS final
+# Step 3: Create Final Image with .NET 8 Runtime and Nginx
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
+
+# Install Nginx
+RUN apk add --no-cache nginx
 
 # Set up working directory
 WORKDIR /app
@@ -32,6 +35,10 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 # Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+# Expose Ports (Optional for local testing)
+EXPOSE 80  # Nginx
+EXPOSE 5000  # .NET API
 
 # Start both .NET API and Nginx
 CMD ["/bin/sh", "/entrypoint.sh"]
