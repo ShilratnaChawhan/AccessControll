@@ -1,5 +1,5 @@
 # Pull official base image
-FROM node:18 AS build
+FROM node:16 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -23,7 +23,7 @@ FROM nginx:1.16.0-alpine
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy the built application from the previous stage
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist/access-controll-ui /usr/share/nginx/html
 
 # Copy custom Nginx configuration file
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
