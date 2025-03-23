@@ -7,7 +7,7 @@ RUN npm install
 RUN npm run build
 
 # Step 2: Build .NET Backend
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS backend-build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS backend-build
 WORKDIR /app
 COPY AccessControll-API/ ./AccessControll-API/
 WORKDIR /app/AccessControll-API
