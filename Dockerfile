@@ -30,8 +30,8 @@ COPY --from=backend-build /app/AccessControll-API/out /app
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Copy entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY AccessControll-API.sln /AccessControll-API.sln
+RUN chmod +x /AccessControll-API.sln
 
 # Start both services
-CMD ["/entrypoint.sh"]
+CMD ["/AccessControll-API.sln"]
