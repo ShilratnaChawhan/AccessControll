@@ -15,7 +15,7 @@ RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
 # Step 3: Create Final Image with Nginx and .NET Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM nginx:1.24-alpine AS final
 
 # Set up working directory
 WORKDIR /app
@@ -29,7 +29,7 @@ COPY --from=frontend-build /app/AccessControll-UI/dist /usr/share/nginx/html
 # Copy Nginx config
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Create and copy entrypoint script
+# Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
