@@ -15,23 +15,23 @@ RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
 # Step 3: Create Final Image with Nginx and .NET Runtime
-FROM nginx:1.16.0-alpine AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 
 # Set up working directory
 WORKDIR /app
 
-# Copy frontend build to Nginx html directory
-COPY --from=frontend-build /app/AccessControll-UI/dist/* /usr/share/nginx/html
-
-# Copy backend build to the same container
+# Copy backend build
 COPY --from=backend-build /app/AccessControll-API/out /app
 
-# Copy custom Nginx config
+# Copy frontend build to Nginx html directory
+COPY --from=frontend-build /app/AccessControll-UI/dist /usr/share/nginx/html
+
+# Copy Nginx config
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Copy entrypoint script
-COPY AccessControll-API.sln /AccessControll-API.sln
-RUN chmod +x /AccessControll-API.sln
+# Create and copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Start both services
-CMD ["/AccessControll-API.sln"]
+# Start both .NET API and Nginx
+CMD ["/bin/sh", "/entrypoint.sh"]
