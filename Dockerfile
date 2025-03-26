@@ -1,4 +1,4 @@
-# Pull official Node.js base image
+# Step 1: Build the Angular app using Node.js
 FROM node:20 AS build
 
 # Set the working directory
@@ -16,20 +16,17 @@ COPY . .
 # Build the Angular application
 RUN npm run build --prod
 
-# Use a lightweight Node.js image for serving the app
-FROM node:20-alpine
+# Step 2: Serve the Angular app using Nginx
+FROM nginx:alpine
 
-# Set the working directory
-WORKDIR /app
+# Copy the built Angular app to the Nginx server directory
+COPY --from=build /app/dist/access-controll-ui /usr/share/nginx/html
 
-# Install 'serve' globally
-RUN npm install -g serve
+# Copy the custom Nginx configuration (if needed)
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Copy the built Angular app from the previous stage
-COPY --from=build /app/dist/access-controll-ui /app
+# Expose port 80 for HTTP traffic
+EXPOSE 80
 
-# Expose port 3000
-EXPOSE 3000
-
-# Start the Angular app using 'serve'
-CMD ["serve", "-s", "/app", "-l", "3000"]
+# Start Nginx in the foreground
+CMD ["nginx", "-g", "daemon off;"]
