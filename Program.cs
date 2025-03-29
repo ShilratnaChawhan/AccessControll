@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-                .WithOrigins("*") // Add your Angular app URL
+                .WithOrigins() // Add your Angular app URL
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
