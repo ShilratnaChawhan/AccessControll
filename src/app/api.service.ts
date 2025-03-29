@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class ApiService {
   private alertMessageSubject = new BehaviorSubject<{ type: string; text: string } | null>(null);
   alertMessage$ = this.alertMessageSubject.asObservable();
-  private apiUrl = "https://localhost:7299/api/AccessControll";
+  private apiUrl = "https://accesscontroll-api.onrender.com/api/AccessControll";
   private secret: string = "abcdefghijklmnop"; 
   private key = CryptoJS.enc.Utf8.parse(this.secret);
   constructor(private http: HttpClient, private router: Router) { }

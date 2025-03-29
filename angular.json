@@ -26,6 +26,9 @@
             "outputPath": "dist/access-controll-ui",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "allowedCommonJsDependencies": [
+              "crypto-js"
+            ],
             "polyfills": [
               "zone.js"
             ],

@@ -1,35 +1,29 @@
-# Pull official Node.js base image
+# pull official base image
 FROM node:20 AS build
 
-# Set the working directory
+#working directory of containerized app
 WORKDIR /app
 
-# Copy package files separately for better caching
-COPY package*.json ./
+#copy 
+COPY . /app/
 
-# Install dependencies
+#prepare the container for building 
 RUN npm install
 
-# Copy the entire application source code
-COPY . .
+# RUN npm install 
+RUN npm run build
 
-# Build the Angular application
-RUN npm run build --prod
+#prepare nginx
+FROM nginx:1.16.0-alpine
+COPY --from=build /app/dist/access-controll-ui /usr/share/nginx/html 
 
-# Use a lightweight Node.js image for serving the app
-FROM node:20-alpine
+RUN rm /etc/nginx/conf.d/default.conf
 
-# Set the working directory
-WORKDIR /app
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Install 'serve' globally
-RUN npm install -g serve
+#fire for nginx
 
-# Copy the built Angular app from the previous stage
-COPY --from=build /app/dist/access-controll-ui /app
+EXPOSE 80
 
-# Expose port 3000
-EXPOSE 3000
+CMD [ "nginx","-g","daemon off;" ]
 
-# Start the Angular app using 'serve'
-CMD ["serve", "-s", "/app", "-l", "3000"]
