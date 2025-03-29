@@ -28,8 +28,8 @@ builder.Services.AddCors(options =>
 });
 
 // Configure Database Context
-builder.Services.AddDbContext<EntityContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<EntityContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JWTSetting");
