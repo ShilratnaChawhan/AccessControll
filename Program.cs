@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-                .WithOrigins("http://localhost:4200") // Add your Angular app URL
+                .WithOrigins("*") // Add your Angular app URL
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
@@ -58,7 +58,6 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
